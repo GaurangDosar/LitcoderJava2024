@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class Main{
+    public static void main(String[] args)
+    {
+        Scanner sc = new Scanner (System.in);
+        String input = sc.nextLine();
+        String[] numbers = input.split(" ");
+        for(String numStr:numbers )
+        {
+            int number = Integer.parseInt(numStr);
+            int digitSum = getSum(number);
+            
+            if(digitSum %2 != 0)
+            {
+                char alphabet = (char)('a'+(digitSum-1));
+                System.out.print(alphabet);
+            }
+            else
+            {
+                System.out.print(digitSum);
+            }
+        }
+        
+         
+    
+    }
+    public static int getSum(int num)
+    {
+        int sum = 0;
+        while(num>0 || sum>=10)
+        {
+            if(num==0)
+            {
+                num=sum;
+                sum=0;
+            }
+            sum+=num%10;
+            num/=10;
+        }
+        return sum;
+    }
+}
