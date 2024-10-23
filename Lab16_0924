@@ -1,0 +1,51 @@
+import java.util.PriorityQueue;
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Read the target sweetness level
+        int targetSweetness = scanner.nextInt();
+        
+        // Read the number of candies and their sweetness levels
+        PriorityQueue<Integer> candies = new PriorityQueue<>();
+        while (scanner.hasNextInt()) {
+            candies.add(scanner.nextInt());
+        }
+        
+        // Call the function to calculate the number of steps to reach the target sweetness
+        int result = combineCandies(candies, targetSweetness);
+        
+        // Print the result (number of steps)
+        System.out.println(result);
+        
+        scanner.close();
+    }
+
+    // Function to calculate the number of steps to reach the target sweetness level
+    public static int combineCandies(PriorityQueue<Integer> candies, int targetSweetness) {
+        int steps = 0;
+
+        // While the least sweet candy is less than the target sweetness, combine candies
+        while (candies.size() > 1 && candies.peek() < targetSweetness) {
+            // Remove the two least sweet candies
+            int leastSweet = candies.poll();
+            int secondLeastSweet = candies.poll();
+            
+            // Create a new candy with the calculated sweetness
+            int newCandy = leastSweet + 2 * secondLeastSweet;
+            candies.add(newCandy);
+            
+            // Increment the step count
+            steps++;
+        }
+        
+        // Check if the least sweet candy meets the target sweetness
+        if (candies.peek() < targetSweetness) {
+            return -1;  // It's not possible to reach the target sweetness
+        }
+        
+        return steps;
+    }
+}
