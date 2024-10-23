@@ -1,0 +1,53 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read Charlie's scores as an array of integers
+        String[] cInput = scanner.nextLine().split(" ");
+        int[] c = new int[cInput.length];
+        for (int i = 0; i < cInput.length; i++) {
+            c[i] = Integer.parseInt(cInput[i]);
+        }
+
+        // Read Dave's scores as an array of integers
+        String[] dInput = scanner.nextLine().split(" ");
+        int[] d = new int[dInput.length];
+        for (int i = 0; i < dInput.length; i++) {
+            d[i] = Integer.parseInt(dInput[i]);
+        }
+
+        // Compare Charlie and Dave's scores and print the comparison points
+        int[] result = calculateComparisonPoints(c, d);
+        System.out.println(result[0] + " " + result[1]);
+
+        scanner.close();
+    }
+
+    /**
+     * Compares Charlie's and Dave's scores and returns the comparison points.
+     *
+     * @param c Charlie's scores
+     * @param d Dave's scores
+     * @return An array where the first element is Charlie's points, and the second element is Dave's points
+     */
+    private static int[] calculateComparisonPoints(int[] c, int[] d) {
+        int charliePoints = 0;
+        int davePoints = 0;
+
+        // Iterate through the scores and compare each corresponding criterion
+        for (int i = 0; i < c.length; i++) {
+            if (c[i] > d[i]) {
+                charliePoints++;
+            } else if (c[i] < d[i]) {
+                davePoints++;
+            }
+            // No action needed when c[i] == d[i], as neither earns a point
+        }
+
+        // Return the comparison points
+        return new int[]{charliePoints, davePoints};
+    }
+}
