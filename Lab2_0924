@@ -1,0 +1,34 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        
+        // Input: available hours and devices to be tested
+        int availableHours = scanner.nextInt();
+        int devicesToTest = scanner.nextInt();
+        
+        // Check if the available hours are less than 4
+        if (availableHours < 4) {
+            System.out.println("Invalid Input");
+        } else {
+            // Calculate the number of devices that can be tested
+            int devicesTested = availableHours / 4;
+            // Remaining devices to be tested
+            int remainingDevices = devicesToTest - devicesTested;
+            
+            // If devices tested are greater than available devices
+            if (devicesTested > devicesToTest) {
+                devicesTested = devicesToTest;
+                remainingDevices = 0;
+            }
+            
+            // Output the number of devices tested and remaining devices
+            System.out.println(devicesTested);
+            System.out.println(remainingDevices);
+        }
+        
+        scanner.close();
+    }
+}
