@@ -1,0 +1,58 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read the input line, split it, and convert it to an array of integers
+        String[] input = scanner.nextLine().split(" ");
+        int[] sightings = new int[input.length];
+
+        // Convert the input string array to an integer array
+        for (int i = 0; i < input.length; i++) {
+            sightings[i] = Integer.parseInt(input[i]);
+        }
+
+        // Find and print the most common plant ID
+        int mostCommonPlant = findMostCommonPlant(sightings);
+        System.out.println(mostCommonPlant);
+
+        scanner.close();
+    }
+
+    /**
+     * Finds the most common plant ID from the sightings array.
+     * If multiple IDs have the same highest frequency, the smallest ID is chosen.
+     *
+     * @param sightings Array of plant IDs representing sightings
+     * @return The ID of the most common plant
+     */
+    private static int findMostCommonPlant(int[] sightings) {
+        Map<Integer, Integer> frequencyMap = new HashMap<>();
+
+        // Count the frequency of each plant ID
+        for (int id : sightings) {
+            frequencyMap.put(id, frequencyMap.getOrDefault(id, 0) + 1);
+        }
+
+        // Find the plant with the highest frequency and the smallest ID in case of ties
+        int mostCommonPlant = Integer.MAX_VALUE;
+        int maxFrequency = 0;
+
+        for (Map.Entry<Integer, Integer> entry : frequencyMap.entrySet()) {
+            int id = entry.getKey();
+            int frequency = entry.getValue();
+
+            // Update if we find a higher frequency or if the frequency is the same and the ID is smaller
+            if (frequency > maxFrequency || (frequency == maxFrequency && id < mostCommonPlant)) {
+                maxFrequency = frequency;
+                mostCommonPlant = id;
+            }
+        }
+
+        return mostCommonPlant;
+    }
+}
