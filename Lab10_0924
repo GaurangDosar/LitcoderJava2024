@@ -1,0 +1,46 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Step 1: Input array size and number of operations (queries)
+        int arraySize = scanner.nextInt(); // Line 1: Array size
+        int queryCount = scanner.nextInt(); // Line 2: Query count
+
+        // Step 2: Initialize the difference array with size + 1 to handle boundary
+        int[] diffArray = new int[arraySize + 1];
+
+        // Step 3: Process each query and apply the difference approach
+        for (int i = 0; i < queryCount; i++) {
+            int start = scanner.nextInt() - 1; // 1-indexed, so subtract 1 for 0-indexed
+            int end = scanner.nextInt() - 1;   // 1-indexed, so subtract 1 for 0-indexed
+            int value = scanner.nextInt();
+
+            // Add 'value' to the start index
+            diffArray[start] += value;
+
+            // Subtract 'value' from the position after the end index
+            if (end + 1 < arraySize) {
+                diffArray[end + 1] -= value;
+            }
+        }
+
+        // Step 4: Calculate the prefix sum and find the maximum value
+        int maxValue = Integer.MIN_VALUE;
+        int currentSum = 0;
+
+        for (int i = 0; i < arraySize; i++) {
+            currentSum += diffArray[i]; // Build the final array using prefix sum
+            if (currentSum > maxValue) {
+                maxValue = currentSum;  // Track the maximum value
+            }
+        }
+
+        // Step 5: Output the maximum value
+        System.out.println(maxValue);
+
+        scanner.close();
+    }
+}
