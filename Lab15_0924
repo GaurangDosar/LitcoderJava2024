@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+public class Main {
+    private static final int MOD = 1000000007;
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt(); // height of the wall
+        int m = scanner.nextInt(); // width of the wall
+
+        System.out.println(legoWall(n, m));
+        scanner.close();
+    }
+
+    // Method to calculate the number of ways to build the wall
+    public static long legoWall(int n, int m) {
+        // Step 1: Compute the number of ways to fill a row
+        long[] waysToFillRow = new long[m + 1];
+        waysToFillRow[0] = 1;  // 1 way to fill a wall of width 0
+        
+        // Iterate over each width from 1 to m
+        for (int width = 1; width <= m; width++) {
+            // Try placing bricks of width 1, 2, 3, and 4
+            waysToFillRow[width] = waysToFillRow[width - 1];  // brick of width 1
+            if (width >= 2) waysToFillRow[width] = (waysToFillRow[width] + waysToFillRow[width - 2]) % MOD;  // brick of width 2
+            if (width >= 3) waysToFillRow[width] = (waysToFillRow[width] + waysToFillRow[width - 3]) % MOD;  // brick of width 3
+            if (width >= 4) waysToFillRow[width] = (waysToFillRow[width] + waysToFillRow[width - 4]) % MOD;  // brick of width 4
+        }
+
+        // Step 2: Calculate the total ways to fill the entire wall
+        long[] totalWays = new long[m + 1];
+        for (int width = 1; width <= m; width++) {
+            totalWays[width] = modPow(waysToFillRow[width], n);  // Raise the number of ways to fill a row to the power of height
+        }
+
+        // Step 3: Calculate the number of valid walls without vertical breaks
+        long[] validWalls = new long[m + 1];
+        validWalls[0] = 1;  // Base case: 1 way to have a valid wall of width 0
+
+        for (int width = 1; width <= m; width++) {
+            validWalls[width] = totalWays[width];  // Initially assume all are valid
+            for (int j = 1; j < width; j++) {
+                validWalls[width] = (validWalls[width] - validWalls[j] * totalWays[width - j] % MOD + MOD) % MOD;
+            }
+        }
+
+        return validWalls[m];  // Return the number of valid walls for width m
+    }
+
+    // Helper method to calculate (base^exp) % MOD using binary exponentiation
+    private static long modPow(long base, int exp) {
+        long result = 1;
+        while (exp > 0) {
+            if ((exp & 1) == 1) {
+                result = result * base % MOD;
+            }
+            base = base * base % MOD;
+            exp >>= 1;
+        }
+        return result;
+    }
+}
