@@ -1,0 +1,87 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+
+    // Custom stack class to manage text operations
+    static class CustomStack {
+        private StringBuilder text;
+        private Stack<String> history;
+        private Stack<String> operationStack;
+
+        public CustomStack() {
+            this.text = new StringBuilder();
+            this.history = new Stack<>();
+            this.operationStack = new Stack<>();
+        }
+
+        // Insert value at the current position
+        public void insert(String value) {
+            history.push(text.toString()); // Save the current state before the operation
+            operationStack.push("1 " + value);
+            text.append(value);
+        }
+
+        // Delete the last 'value' number of characters
+        public void delete(int value) {
+            history.push(text.toString()); // Save the current state before the operation
+            operationStack.push("2 " + value);
+            int length = text.length();
+            if (length >= value) {
+                text.delete(length - value, length);
+            } else {
+                text.setLength(0); // In case value exceeds the length
+            }
+        }
+
+        // Get the character at index 'value' (1-based index)
+        public char get(int value) {
+            return text.charAt(value - 1);
+        }
+
+        // Undo the last operation
+        public void undo() {
+            if (!history.isEmpty()) {
+                text = new StringBuilder(history.pop()); // Revert to previous state
+                operationStack.pop(); // Pop the last operation
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CustomStack editor = new CustomStack();
+        String[] commands = scanner.nextLine().split(",");
+
+        for (String command : commands) {
+            String[] parts = command.trim().split(" ");
+            int operation = Integer.parseInt(parts[0]);
+
+            switch (operation) {
+                case 1: // Insert command
+                    String value = parts[1];
+                    editor.insert(value);
+                    break;
+
+                case 2: // Delete command
+                    int delValue = Integer.parseInt(parts[1]);
+                    editor.delete(delValue);
+                    break;
+
+                case 3: // Get command
+                    int index = Integer.parseInt(parts[1]);
+                    System.out.println(editor.get(index));
+                    break;
+
+                case 4: // Undo command
+                    editor.undo();
+                    break;
+
+                default:
+                    throw new IllegalArgumentException("Invalid operation");
+            }
+        }
+
+        scanner.close();
+    }
+}
