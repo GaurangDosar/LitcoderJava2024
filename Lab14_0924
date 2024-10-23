@@ -1,0 +1,81 @@
+import java.util.Scanner;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Reading input
+        String start = scanner.nextLine();
+        String end = scanner.nextLine();
+
+        // Printing the result of the transformation check
+        System.out.println(canTransform(start, end));
+        
+        scanner.close();
+    }
+
+    // Method to check if the 'start' string can be transformed into 'end' string
+    public static boolean canTransform(String start, String end) {
+        // Edge case: if the lengths are not the same, transformation is impossible
+        if (start.length() != end.length()) {
+            return false;
+        }
+
+        // Replace 'X' and verify the relative positions of 'L' and 'R'
+        String startFiltered = start.replace("X", "");
+        String endFiltered = end.replace("X", "");
+
+        // If the order of 'L' and 'R' is not the same after removing 'X's, transformation is impossible
+        if (!startFiltered.equals(endFiltered)) {
+            return false;
+        }
+
+        // Checking if moves are valid
+        int n = start.length();
+        int i = 0, j = 0;
+
+        // Traverse both strings simultaneously
+        while (i < n && j < n) {
+            // Skip all 'X' characters in 'start'
+            while (i < n && start.charAt(i) == 'X') {
+                i++;
+            }
+            // Skip all 'X' characters in 'end'
+            while (j < n && end.charAt(j) == 'X') {
+                j++;
+            }
+
+            // If both have reached the end, the transformation is possible
+            if (i == n && j == n) {
+                return true;
+            }
+
+            // If one of the strings reached the end but not the other, it's invalid
+            if (i == n || j == n) {
+                return false;
+            }
+
+            // 'L' can only move to the left and 'R' can only move to the right
+            if (start.charAt(i) != end.charAt(j)) {
+                return false;
+            }
+
+            // If we encounter an 'L', it can only move to the left (i >= j)
+            if (start.charAt(i) == 'L' && i < j) {
+                return false;
+            }
+
+            // If we encounter an 'R', it can only move to the right (i <= j)
+            if (start.charAt(i) == 'R' && i > j) {
+                return false;
+            }
+
+            // Move to the next character in both strings
+            i++;
+            j++;
+        }
+
+        // If any remaining characters are non-'X' characters, return false
+        return true;
+    }
+}
