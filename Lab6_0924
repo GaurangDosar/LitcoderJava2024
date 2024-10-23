@@ -1,0 +1,76 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        // Create a scanner object to read input from the user
+        Scanner scanner = new Scanner(System.in);
+
+        // Read the input number from the user
+        int input = scanner.nextInt();
+
+        // Find and print the largest special prime less than the input
+        int largestSpecialPrime = findLargestSpecialPrime(input);
+        System.out.print(largestSpecialPrime);
+
+        scanner.close();
+    }
+
+    /**
+     * Finds the largest special prime number less than a given number.
+     * A special prime is a prime whose concatenated digits also form prime numbers.
+     * 
+     * @param input The upper limit for the special prime number search
+     * @return The largest special prime less than input
+     */
+    public static int findLargestSpecialPrime(int input) {
+        for (int number = input - 1; number > 1; number--) {
+            if (isSpecialPrime(number)) {
+                return number;
+            }
+        }
+        return -1; // Return -1 if no special prime is found (edge case handling)
+    }
+
+    /**
+     * Checks if a number is a special prime.
+     * A special prime must be prime itself, and all possible prefixes of its digits must be prime.
+     * 
+     * @param number The number to check
+     * @return true if the number is a special prime, false otherwise
+     */
+    public static boolean isSpecialPrime(int number) {
+        if (!isPrime(number)) {
+            return false;
+        }
+
+        String numStr = String.valueOf(number);
+        // Check all possible prefix combinations
+        for (int i = 1; i <= numStr.length(); i++) {
+            int prefix = Integer.parseInt(numStr.substring(0, i));
+            if (!isPrime(prefix)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Determines if a number is prime.
+     * 
+     * @param num The number to check
+     * @return true if the number is prime, false otherwise
+     */
+    public static boolean isPrime(int num) {
+        if (num < 2) {
+            return false;
+        }
+        for (int i = 2; i <= Math.sqrt(num); i++) {
+            if (num % i == 0) {
+                return false;
+            }
+        }
+        return true;
+    }
+}
