@@ -1,0 +1,77 @@
+import java.util.Scanner;
+import java.util.Stack;
+
+public class Main {
+    
+    // Custom Queue class implemented using two stacks
+    static class CustomQueue {
+        private Stack<Integer> stack1;
+        private Stack<Integer> stack2;
+
+        public CustomQueue() {
+            this.stack1 = new Stack<>();
+            this.stack2 = new Stack<>();
+        }
+
+        // Enqueue operation - add element to the end of the queue
+        public void enqueue(int value) {
+            stack1.push(value);
+        }
+
+        // Dequeue operation - remove the element from the front of the queue
+        public void dequeue() {
+            shiftStacks();
+            if (!stack2.isEmpty()) {
+                stack2.pop();
+            }
+        }
+
+        // Print front operation - print the element at the front of the queue
+        public void printFront() {
+            shiftStacks();
+            if (!stack2.isEmpty()) {
+                System.out.println(stack2.peek());
+            }
+        }
+
+        // Move elements from stack1 to stack2 when needed
+        private void shiftStacks() {
+            if (stack2.isEmpty()) {
+                while (!stack1.isEmpty()) {
+                    stack2.push(stack1.pop());
+                }
+            }
+        }
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        CustomQueue queue = new CustomQueue();
+        
+        // Read input as comma-separated commands
+        String[] commands = scanner.nextLine().split(",");
+
+        // Process each command
+        for (String command : commands) {
+            String[] parts = command.trim().split(" ");
+            int operation = Integer.parseInt(parts[0]);
+
+            switch (operation) {
+                case 1: // Enqueue operation
+                    int value = Integer.parseInt(parts[1]);
+                    queue.enqueue(value);
+                    break;
+                case 2: // Dequeue operation
+                    queue.dequeue();
+                    break;
+                case 3: // Print front operation
+                    queue.printFront();
+                    break;
+                default:
+                    throw new IllegalArgumentException("Invalid operation");
+            }
+        }
+
+        scanner.close();
+    }
+}
