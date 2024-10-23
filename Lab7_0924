@@ -1,0 +1,56 @@
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Read the divisor from the first line
+        int divisor = scanner.nextInt();
+        scanner.nextLine(); // Consume the newline
+
+        // Read the second line as the input array
+        String[] input = scanner.nextLine().split(" ");
+        int[] array = new int[input.length];
+
+        // Convert the string input to integers
+        for (int i = 0; i < input.length; i++) {
+            array[i] = Integer.parseInt(input[i]);
+        }
+
+        // Find and print the number of pairs whose sum is divisible by the divisor
+        int pairCount = countDivisiblePairs(array, divisor);
+        System.out.println(pairCount);
+
+        scanner.close();
+    }
+
+    /**
+     * Counts the number of pairs in the array whose sum is divisible by the given divisor.
+     *
+     * @param array The array of integers
+     * @param divisor The divisor to check against
+     * @return The count of pairs whose sum is divisible by the divisor
+     */
+    private static int countDivisiblePairs(int[] array, int divisor) {
+        // Map to store the frequency of remainders
+        Map<Integer, Integer> remainderMap = new HashMap<>();
+        int count = 0;
+
+        // Calculate remainders and their frequencies
+        for (int num : array) {
+            int remainder = ((num % divisor) + divisor) % divisor; // Handle negative remainders
+            int complement = (divisor - remainder) % divisor; // Find the complement remainder
+            
+            // If the complement exists, add its frequency to the count
+            count += remainderMap.getOrDefault(complement, 0);
+
+            // Update the frequency of the current remainder
+            remainderMap.put(remainder, remainderMap.getOrDefault(remainder, 0) + 1);
+        }
+
+        return count;
+    }
+}
