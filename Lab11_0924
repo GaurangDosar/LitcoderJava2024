@@ -1,0 +1,71 @@
+import java.util.Scanner;
+
+public class Main {
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        // Input for the first array
+        String[] arr1Input = scanner.nextLine().split(" ");
+        int[] arr1 = new int[arr1Input.length];
+        for (int i = 0; i < arr1Input.length; i++) {
+            arr1[i] = Integer.parseInt(arr1Input[i]);
+        }
+
+        // Input for the second array
+        String[] arr2Input = scanner.nextLine().split(" ");
+        int[] arr2 = new int[arr2Input.length];
+        for (int i = 0; i < arr2Input.length; i++) {
+            arr2[i] = Integer.parseInt(arr2Input[i]);
+        }
+
+        // Input for the third array
+        String[] arr3Input = scanner.nextLine().split(" ");
+        int[] arr3 = new int[arr3Input.length];
+        for (int i = 0; i < arr3Input.length; i++) {
+            arr3[i] = Integer.parseInt(arr3Input[i]);
+        }
+
+        // Find common elements and print them
+        findCommonElements(arr1, arr2, arr3);
+
+        scanner.close();
+    }
+
+    /**
+     * Finds and prints common elements in three sorted arrays.
+     * If no common elements exist, it prints "No Elements".
+     *
+     * @param arr1 First sorted array
+     * @param arr2 Second sorted array
+     * @param arr3 Third sorted array
+     */
+    private static void findCommonElements(int[] arr1, int[] arr2, int[] arr3) {
+        int i = 0, j = 0, k = 0;
+        boolean hasCommonElements = false;
+
+        while (i < arr1.length && j < arr2.length && k < arr3.length) {
+            // If all three arrays have the same element at current index, print it
+            if (arr1[i] == arr2[j] && arr1[i] == arr3[k]) {
+                System.out.print(arr1[i] + " ");
+                hasCommonElements = true;
+                i++;
+                j++;
+                k++;
+            }
+            // Move the pointer for the smallest value among the three arrays
+            else if (arr1[i] < arr2[j]) {
+                i++;
+            } else if (arr2[j] < arr3[k]) {
+                j++;
+            } else {
+                k++;
+            }
+        }
+
+        // If no common elements were found, print "No Elements"
+        if (!hasCommonElements) {
+            System.out.println("No Elements");
+        }
+    }
+}
